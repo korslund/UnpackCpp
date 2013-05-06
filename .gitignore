@@ -4,5 +4,6 @@ Makefile
 cmake_install.cmake
 */tests/*_test
 tests/*_test
-7zip_compress
-bzip2
+*/tests/_*
+tests/_*
+ext
