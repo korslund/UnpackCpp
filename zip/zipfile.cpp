@@ -1,5 +1,5 @@
 #include "zipfile.hpp"
-#include "misc/fileparser.hpp"
+#include "../misc/fileparser.hpp"
 #include <stdexcept>
 #include <zlib.h>
 #include <assert.h>

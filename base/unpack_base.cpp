@@ -1,6 +1,6 @@
 #include "unpack_base.hpp"
 
-#include "misc/dirwriter.hpp"
+#include "../misc/dirwriter.hpp"
 #include <mangle/stream/servers/file_stream.hpp>
 
 using namespace Mangle::VFS;
