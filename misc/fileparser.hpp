@@ -1,10 +1,10 @@
 #ifndef __UNP_FILE_PARSER_HPP_
 #define __UNP_FILE_PARSER_HPP_
 
-#include <mangle/stream/servers/file_stream.hpp>
-#include <mangle/stream/servers/outfile_stream.hpp>
 #include <mangle/stream/filters/pure_filter.hpp>
+#include <stdexcept>
 #include <stdint.h>
+#include <vector>
 
 namespace UnpackCpp
 {
@@ -15,12 +15,11 @@ namespace UnpackCpp
     FileParser() {}
     FileParser(MS::StreamPtr _src)
       : MS::PureFilter(_src) {}
-    FileParser(const std::string &file)
-      : MS::PureFilter(MS::StreamPtr(new MS::FileStream(file))) {}
 
     template <typename T>
     void readT(T &t)
     {
+      // TODO: Implement endian byte swapping
       if(read(&t, sizeof(t)) != sizeof(t))
         throw std::runtime_error("Read error or end of stream");
     }
@@ -69,6 +68,7 @@ namespace UnpackCpp
 
     void skip(uint32_t bytes)
     {
+      if(!bytes) return;
       if(isSeekable && hasPosition)
         seek(tell() + bytes);
       else
@@ -84,6 +84,13 @@ namespace UnpackCpp
         }
     }
 
+    std::string readString(int size)
+    {
+      std::vector<char> buf(size);
+      read(&buf[0],size);
+      return std::string(&buf[0],size);
+    }
+
     void store(MS::StreamPtr out, uint32_t bytes)
     {
       char buf[1024];
@@ -96,9 +103,6 @@ namespace UnpackCpp
           bytes -= count;
         }
     }
-
-    void store(const std::string &file, uint32_t bytes)
-    { store(MS::StreamPtr(new MS::OutFileStream(file)), bytes); }
   };
 }
 #endif

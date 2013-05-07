@@ -8,7 +8,7 @@ namespace UnpackCpp
   /* An unpacker that auto-detects archive format.
 
      Currently supported formats:
-     - ZIP (unpack_zip.hpp)
+     - ZIP (zip/unpack_zip.hpp)
 
      Throws an error if the file is missing, or if no supported format
      was detected.
@@ -22,7 +22,7 @@ namespace UnpackCpp
    */
   struct AutoUnpack : UnpackBase
   {
-    void unpack(const std::string &file,
+    void unpack(Mangle::Stream::StreamPtr input,
                 Mangle::VFS::StreamFactoryPtr output,
                 Progress *prog = NULL,
                 const FileList *list = NULL);

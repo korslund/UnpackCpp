@@ -1,12 +1,8 @@
 #include "auto.hpp"
-#include <iostream>
-#include <assert.h>
-#include <exception>
-
-#include "print_dir.hpp"
+#include "common.cpp"
 
 using namespace std;
-using namespace Unpack;
+using namespace UnpackCpp;
 
 void test(const std::string &file)
 {
@@ -14,7 +10,7 @@ void test(const std::string &file)
   AutoUnpack unp;
   try
     {
-      unp.unpack(file, "_outdir3");
+      unp.unpack(file, makeFact());
     }
   catch(std::exception &e)
     {
@@ -29,7 +25,9 @@ int main()
   test("test.sh");
   test("doesn't exist");
   test("archives/test.zip");
-
-  printDir("_outdir3");
+  test("archives/test.rar");
+  test("archives/test.tar");
+  test("archives/test.tar.gz");
+  test("archives/test.tar.bz2");
   return 0;
 }

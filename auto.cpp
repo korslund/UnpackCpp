@@ -20,36 +20,35 @@ using namespace std;
    This isn't a priority right now.
  */
 
-static void fail(const std::string &msg, const std::string &file)
+static void fail(const std::string &msg)
 {
-  throw std::runtime_error("Error unpacking "+file+": " + msg);
+  throw std::runtime_error(msg);
 }
 
-void AutoUnpack::unpack(const std::string &file, Mangle::VFS::StreamFactoryPtr output,
-                        Progress *prog, const FileList *list)
+void AutoUnpack::unpack(Mangle::Stream::StreamPtr input, Mangle::VFS::StreamFactoryPtr output, Progress *prog, const FileList *list)
 {
   UnpackBase *unp = NULL;
 
+  assert(input->isReadable);
+  assert(input->isSeekable);
+  assert(input->hasPosition);
+
   // Magic number test
   {
-    ifstream ifs(file.c_str());
-
-    if(!ifs)
-      fail("Cannot open file", file);
-
+    input->seek(0);
     int magic = 0;
-    ifs.read((char*)&magic, 4);
+    input->read(&magic, 4);
 
     if(magic == 0x04034b50) unp = new UnpackZip;
     else if(magic == 0x21726152)
-      fail("RAR not implemented yet", file);
-    else if((magic & 0xffff) == 0x5a4d) // "MZ"
-      fail("Cannot open EXE files yet", file);
+      fail("RAR not implemented yet");
+    else if((magic & 0xffff) == 0x5a4d)
+      fail("Cannot open EXE files yet");
   }
 
   if(!unp)
-    fail("Not a known archive type", file);
+    fail("Not a known archive type");
 
-  unp->unpack(file, output, prog, list);
+  unp->unpack(input, output, prog, list);
   delete unp;
 }

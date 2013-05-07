@@ -3,7 +3,5 @@ CMakeFiles
 Makefile
 cmake_install.cmake
 */tests/*_test
-tests/*_test
 */tests/_*
-tests/_*
 ext

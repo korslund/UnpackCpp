@@ -1,0 +1,12 @@
+Unpacking some fake files:
+FILE: test1.dummy.empty
+  
+FILE: test2.txt
+  Hello dolly
+
+FILE: dir1/
+FILE: dir2/test3.txt
+  
+  This is Louis, Dolly
+
+Done

@@ -13,8 +13,7 @@ namespace UnpackCpp
        file path base/name.
 
      - calling open("") throws an exception, as does any other file
-       error. The stream itself may also throw exceptions on error, of
-       course.
+       error. The stream itself may also throw exceptions on error.
 
      - all necessary nested subdirectories are created before opening
        the file
