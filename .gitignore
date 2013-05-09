@@ -5,3 +5,5 @@ cmake_install.cmake
 */tests/*_test
 */tests/_*
 ext
+*.a
+*_kill
