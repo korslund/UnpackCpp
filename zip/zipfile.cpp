@@ -8,6 +8,14 @@
 using namespace UnpackCpp;
 using namespace Mangle::Stream;
 
+//#define PRINT_DEBUG
+#ifdef PRINT_DEBUG
+#include <iostream>
+#define PRINT(a) std::cout << a << "\n"
+#else
+#define PRINT(a)
+#endif
+
 struct Entry
 {
   bool isComp;
@@ -175,6 +183,8 @@ void ZipFile::openZipArchive(StreamPtr input)
 
 void ZipFile::unpackFile(int index, StreamPtr output)
 {
+  PRINT("unpackFile(" << index << ")");
+
   assert(index >= 0 && index < files.size());
   assert(files.size() == ptr->entries.size());
   assert(output->isWritable);
@@ -182,6 +192,8 @@ void ZipFile::unpackFile(int index, StreamPtr output)
   const Entry &e = ptr->entries[index];
   const File &f = files[index];
   FileParser &inp = ptr->input;
+
+  PRINT("  name=" << f.name << " comp=" << f.comp << " size=" << f.size);
 
   // Skip header
   inp.seek(e.offset);
@@ -276,12 +288,15 @@ void ZipFile::unpackFile(int index, StreamPtr output)
             }
           while(ret == Z_OK);
 
-          if(ret == Z_STREAM_END || written >= f.size)
+          if(ret == Z_STREAM_END || written > f.size)
             break;
         }
     }
   catch(...) { inflateEnd(&strm); throw; }
   inflateEnd(&strm);
+
+  PRINT("ret=" << ret << " left=" << left << " written=" << written);
+
   if(ret != Z_STREAM_END || left != 0 || written != f.size)
     fail("Error decompressing data - size mismatch");
 }
